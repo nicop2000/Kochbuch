@@ -1,0 +1,92 @@
+{
+  "helloWorld": "Hallo Welt!",
+  "@helloWorld": {
+    "description": "The conventional newborn programmer greeting"
+  },
+  "alle_rezepte": "Alle Rezepte",
+  "fruehstueck": "Frühstück",
+  "mittagessen": "Mittagessen",
+  "abendessen": "Abendessen",
+  "dessert": "Dessert",
+  "torte": "Torte",
+  "kuchen": "Kuchen",
+  "kekse": "Kekse",
+  "gebaeck": "Gebaeck",
+  "brot": "Brot",
+  "salate": "Salat",
+  "cocktail": "Cocktail",
+  "sonstiges": "Sonstiges",
+  "ok_button_text": "OK",
+  "abbrechen_button_text": "Abbrechen",
+  "fehler_text": "Fehler",
+  "zutaten_page_title": "Zutaten",
+  "keine_zutaten_info_text": "Es wurden keine Zutaten hinterlegt",
+  "neue_zutat_button_text": "Neue Zutat hinzufügen",
+  "neue_zutat_page_title": "Zutat hinzufügen",
+  "zutat_edit_page_title": "Zutat bearbeiten",
+  "zubereitungsschritte_page_title": "Zubereitungsschritte",
+  "keine_zubereitungsschritte_info_text": "Es wurden keine Zubereitungsschritte hinterlegt",
+  "neuer_zubereitungsschritt_button_text": "Neuen Zubereitungsschritt hinzufügen",
+  "neuer_zubereitungsschritt_page_title": "Zubereitungsschritt hinzufügen",
+  "zubereitungsschritt_edit_page_title": "Zubereitungsschritt bearbeiten",
+  "exportieren_button_text": "Exportieren",
+  "hinzufuegen_button_tooltip": "Hinzufügen",
+  "bearbeiten_button_tooltip": "Bearbeiten",
+  "loeschen_button_tooltip": "Löschen",
+  "neues_rezept_button_tooltip": "Neues Rezept hinzufügen",
+  "hinzufuegen_button_text": "Hinzufügen",
+  "speichern_button_text": "Speichern",
+  "menge_placeholder": "Menge",
+  "zutat_name_placeholder": "Name",
+  "bild_hinzufuegen_button_text": "Bild hinzufügen",
+  "bildquelle_auswaehlen_text": "Aus welcher Quelle soll das Bild importiert werden",
+  "bildquelle_auswaehlen_title": "Bild auswählen",
+  "bildquelle_kamera_button_text": "Bild mit Kamera erstellen",
+  "bildquelle_galerie_button_text": "Bild aus Galerie auswählen",
+  "rezept_titel_placeholder": "Titel des Rezepts eingeben",
+  "rezept_beschreibung_placeholder": "Beschreibung eingeben (optional)",
+  "rezept_link_placeholder": "Link zum Rezept eingeben (optional)",
+  "rezept_backzeit_zeit_placeholder": "Zeit",
+  "rezept_backzeit_minuten_bei_text": "Minuten bei",
+  "rezept_backzeit_temperatur_bei_placeholder": "Temperatur",
+  "rezept_backzeit_verb": "backen",
+  "rezept_hinzufuegen_button_text": "Rezept hinzufügen",
+  "rezept_hinzufuegen_page_title": "Neues Rezept hinzufügen",
+  "rezept_bearbeiten_button_text": "Rezept speichern",
+  "rezept_bearbeiten_page_title": "Rezept bearbeiten",
+  "rezept_loeschen_dialog_title": "Bestätigung",
+  "rezept_loeschen_dialog_ja": "Ja, löschen",
+  "rezept_loeschen_dialog_nein": "Nein, lieber behalten",
+  "rezept_loeschen_dialog_text": "Soll das Rezept mit dem Titel {titel} wirklich gelöscht werden?",
+  "@rezept_loeschen_dialog_text": {
+    "placeholders": {
+      "titel": {
+        "type": "String",
+        "example": "Porridge"
+      }
+    }
+  },
+  "rezept_geloescht_info_text": "{titel} wurde gelöscht",
+  "@rezept_geloescht_info_text": {
+    "placeholders": {
+      "titel": {
+        "type": "String",
+        "example": "Porridge"
+      }
+    }
+  },
+  "rezept_im_browser_oeffnen_button_text": "Im Browser öffnen",
+  "rezept_im_browser_error_dialog_text": "Das Rezept konnte nicht im Browser geöffnet werden. Entweder gab es einen internen Fehler oder der Link ist fehlerhaft",
+  "rezept_bild_loeschen": "Bild löschen",
+  "rezept_beschreibung_headline" : "Beschreibung",
+  "rezept_import_einzeln_button_text": "Einzelnes Rezept importieren",
+  "rezept_import_collection_button_text": "Ganzes Kochbuch importieren",
+  "rezept_import_error_dialog_title": "Fehler",
+  "rezept_import_error_dialog_text": "Die ausgewählte Datei ist nicht gültig. Stellen Sie sicher, die richtige Option ausgewählt zu haben",
+  "rezept_import_success_dialog_title": "Erfolg",
+  "rezept_import_success_dialog_text": "Die ausgewählte Datei wurde importiert",
+  "rezept_export_collection_button_text": "Mein Kochbuch exportieren",
+  "rezept_import_page_title": "Dateien importieren",
+  "rezept_einstellungen_page_title": "Einstellungen",
+  "rezept_suche_page_title": "Alle Rezepte durchsuchen"
+}

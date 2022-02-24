@@ -1,21 +1,26 @@
+import 'dart:convert';
 import 'dart:io';
-import 'dart:io' as Io;
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kochbuch/data/instruction.dart';
 import 'package:kochbuch/data/instruction_image.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:kochbuch/common.dart';
 
-class AddInstruction extends StatefulWidget {
-  AddInstruction({Key? key, required this.onPressed}) : super(key: key);
+class AddEditInstruction extends StatefulWidget {
+  const AddEditInstruction({Key? key, required this.onPressed, this.instruction}) : super(key: key);
 
   final Function(Instruction) onPressed;
+  final Instruction? instruction;
 
   @override
-  State<AddInstruction> createState() => _AddInstructionState();
+  State<AddEditInstruction> createState() => _AddEditInstructionState();
 }
 
-class _AddInstructionState extends State<AddInstruction> {
+class _AddEditInstructionState extends State<AddEditInstruction> {
   final TextEditingController anweisungTextController = TextEditingController();
 
   File? image;
@@ -23,48 +28,56 @@ class _AddInstructionState extends State<AddInstruction> {
   final picker = ImagePicker();
 
   double size = 512;
-
+  bool first = true;
+  String buttonText = "";
+  String titleText = "";
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text("Anweisung hinzufügen"),
-        backgroundColor: CupertinoColors.systemRed,
-        transitionBetweenRoutes: true,
+    if(first && widget.instruction != null) prepareForEditing();
+    else if (widget.instruction == null) {
+      buttonText = AppLocalizations.of(context)!.hinzufuegen_button_text;
+      titleText = AppLocalizations.of(context)!.neuer_zubereitungsschritt_page_title;
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(titleText, style: Theme.of(context).textTheme.headline1,),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.secondary),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      child: SafeArea(
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 5.0),
-                  child: Text("Neuen Schritt hinzufügen "),
-                ),
                 CupertinoTextField(
                   controller: anweisungTextController,
+                  style: Theme.of(context).textTheme.bodyText1,
                   maxLines: 5,
                 ),
                 CupertinoButton(
-                    child: const Text("Bild hinzufügen"),
+                    child: Text(AppLocalizations.of(context)!.bild_hinzufuegen_button_text,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),),
                     onPressed: () {
                       showCupertinoDialog(
                           context: context,
                           builder: (BuildContext bc) {
                             return CupertinoAlertDialog(
-                              title: const Text("Bild auswählen"),
+                              title: Text(AppLocalizations.of(context)!.bildquelle_auswaehlen_title, style: Theme.of(context).textTheme.headline2,),
                               content: Column(
-                                children: const [
+                                children:  [
                                   Text(
-                                      "Aus welcher Quelle soll das Bild importiert werden?"),
+                                      AppLocalizations.of(context)!.bildquelle_auswaehlen_text, style: Theme.of(context).textTheme.bodyText1),
                                 ],
                               ),
                               actions: <Widget>[
                                 CupertinoDialogAction(
                                   child:
-                                      const Text("Bild aus Galerie auswählen"),
+                                      Text(AppLocalizations.of(context)!.bildquelle_galerie_button_text, style: Theme.of(context).textTheme.button),
                                   onPressed: () async {
                                     Navigator.of(context).pop();
                                     final newImg = await _imgFromGallery();
@@ -77,7 +90,7 @@ class _AddInstructionState extends State<AddInstruction> {
                                 ),
                                 CupertinoDialogAction(
                                   child:
-                                      const Text("Bild von Kamera auswählen"),
+                                      Text(AppLocalizations.of(context)!.bildquelle_kamera_button_text, style: Theme.of(context).textTheme.button),
                                   onPressed: () async {
                                     Navigator.of(context).pop();
                                     final newImg = await _imgFromCamera();
@@ -90,27 +103,37 @@ class _AddInstructionState extends State<AddInstruction> {
                                 ),
                                 CupertinoDialogAction(
                                   child:
-                                  const Text("Abbrechen"),
+                                  Text(AppLocalizations.of(context)!.abbrechen_button_text, style: Theme.of(context).textTheme.button),
                                   onPressed: () async => Navigator.of(context).pop(),
                                 ),
                               ],
                             );
                           });
                     }),
-                if (image != null)
-                  Image.file(
-                    image!,
-                    height: 200,
-                  ),
+                if(image != null)
+                Column(
+                  children: [
+                    Image.file(
+                      image!,
+                      height: 200,
+                    ),
+                    CupertinoButton(child: Text(AppLocalizations.of(context)!.rezept_bild_loeschen, style: Theme.of(context).textTheme.button), onPressed: () {
+                      setState(() {
+                        image = null;
+                      });
+                    })
+                  ],
+                ),
                 CupertinoButton(
-                  child: const Text("Fertigstellen"),
+                  child: Text(buttonText,
+                      style: Theme.of(context).textTheme.button),
                   onPressed: () {
                     Instruction i = Instruction(
                         instruction: anweisungTextController.text,
                         instructionImage: image != null
                             ? InstructionImage(
                                 base64String:
-                                    image!.readAsBytesSync().toString())
+                                base64Encode(image!.readAsBytesSync()))
                             : null);
                     widget.onPressed(i);
                   },
@@ -121,6 +144,23 @@ class _AddInstructionState extends State<AddInstruction> {
         ),
       ),
     );
+  }
+
+  Future<void> prepareForEditing() async {
+    first = false;
+    anweisungTextController.text = widget.instruction!.instruction;
+    if (widget.instruction!.instructionImage != null) {
+      getTemporaryDirectory().then((value) async {
+      Uint8List imageInUnit8List = base64Decode(widget.instruction!.instructionImage!.base64String);// store unit8List image here ;
+        File file = await File('${value.path}/image.png').create();
+        file.writeAsBytesSync(imageInUnit8List);
+        setState(() {
+        image = file;
+        });
+      });
+    }
+    buttonText = AppLocalizations.of(context)!.speichern_button_text;
+    titleText = AppLocalizations.of(context)!.zubereitungsschritt_edit_page_title;
   }
 
   Future<XFile?> _imgFromCamera() async {

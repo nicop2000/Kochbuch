@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:kochbuch/data/abteilung.dart';
 import 'package:kochbuch/data/backanweisung.dart';
+import 'package:kochbuch/common.dart';
+import 'package:kochbuch/data/recipe.dart';
 
 extension TemperatureinheitNamen on Temperatureinheit {
   String get showName =>
@@ -33,5 +36,60 @@ extension AbteilungsNamen on Abteilung {
       Abteilung.torte,
       Abteilung.brot
     ]);
+  }
+}
+
+extension AbteilungMap on Abteilung {
+  String getInternational(BuildContext context) {
+  Map<Abteilung, String> _map = {
+    Abteilung.fruehstueck : AppLocalizations
+        .of(context)!.fruehstueck,
+    Abteilung.mittagessen : AppLocalizations
+        .of(context)!.mittagessen,
+    Abteilung.abendessen : AppLocalizations
+        .of(context)!.abendessen,
+    Abteilung.dessert : AppLocalizations
+        .of(context)!.dessert,
+    Abteilung.torte : AppLocalizations
+        .of(context)!.torte,
+    Abteilung.kuchen : AppLocalizations
+        .of(context)!.kuchen,
+    Abteilung.kekse : AppLocalizations
+        .of(context)!.kekse,
+    Abteilung.gebaeck : AppLocalizations
+        .of(context)!.gebaeck,
+    Abteilung.brot : AppLocalizations
+        .of(context)!.brot,
+    Abteilung.salate : AppLocalizations
+        .of(context)!.salate,
+    Abteilung.cocktail : AppLocalizations
+        .of(context)!.cocktail,
+    Abteilung.sonstiges : AppLocalizations
+        .of(context)!.sonstiges
+  };
+    return _map[this]!;
+  }
+}
+
+extension ListRecipeWhere on List<Recipe> {
+  List<Recipe> whereTitle(String string) {
+    List<Recipe> result = [];
+    for (Recipe recipe in this) {
+      if (recipe.title.toLowerCase().contains(string.toLowerCase())) {
+        result.add(recipe);
+      }
+    }
+    return result;
+  }
+
+  List<Recipe> filterFavorites(bool filter) {
+    if(!filter) return this;
+    List<Recipe> result = [];
+    for (Recipe recipe in this) {
+      if (recipe.fav) {
+        result.add(recipe);
+      }
+    }
+    return result;
   }
 }

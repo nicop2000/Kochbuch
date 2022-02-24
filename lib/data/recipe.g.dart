@@ -9,7 +9,7 @@ part of 'recipe.dart';
 Recipe _$RecipeFromJson(Map<String, dynamic> json) => Recipe(
       title: json['title'] as String,
       description: json['description'] as String?,
-      abteilung: $enumDecode(_$AbteilungEnumMap, 'brot'), //TODO: json['abteilung'].toString().toLowerCase()
+      abteilung: $enumDecode(_$AbteilungEnumMap, json['abteilung'].toString().toLowerCase()),
       backanweisung: json['backanweisung'] == null
           ? null
           : Backanweisung.fromJson(

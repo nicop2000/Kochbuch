@@ -3,6 +3,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:kochbuch/data/recipe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,34 +23,35 @@ class RecipeService {
   }
   RecipeService._internal();
 
-  final _controller = StreamController<List<Recipe>>();
+  List<Recipe> get recepies => _recipes;
 
-  Stream<List<Recipe>> get recipeStream => _controller.stream;
-
-
-
-  addRecipe(Recipe recipe) async {
-    Recipe normedRecipe = _normRecipe(recipe);
+  Future<Recipe> addRecipe(Recipe recipe) async {
+    Recipe normedRecipe = normRecipe(recipe);
     await prefs?.setString(_getRecipeKey(normedRecipe.id), jsonEncode(normedRecipe.toJson()));
     _setMax(normedRecipe.id);
     _recipes.add(normedRecipe);
-    emitStream();
+    return normedRecipe;
   }
 
-  removeRecipe(Recipe recipe) async {
+
+  Future<void> removeRecipe(Recipe recipe) async {
+    log("start");
     await prefs?.remove(_getRecipeKey(recipe.id));
+    log("mid");
     _recipes.removeWhere((element) => element.id == recipe.id);
-    emitStream();
+    log("DONE");
+    return;
+  }
+
+  Future<void> updateFavoritePreferenceRecipe(Recipe recipe) async {
+    await prefs?.setString(_getRecipeKey(recipe.id), jsonEncode(recipe.toJson()));
+    return;
   }
 
   String _getRecipeKey(int recipeID) => "$_recipePrefix + $recipeID";
   int _getMax() => prefs?.getInt(_preferencesMaxID) ?? 0;
   _setMax(int max) => prefs?.setInt(_preferencesMaxID, max);
-  Recipe _normRecipe(Recipe recipe) => Recipe.copyWithNewId(recipe, _getMax() + 1);
-
-  void emitStream() {
-    _controller.sink.add(_recipes);
-  }
+  Recipe normRecipe(Recipe recipe) => Recipe.copyWithNewId(recipe, _getMax() + 1);
 
    void loadRecipes() {
     int max = _getMax();
@@ -62,7 +64,6 @@ class RecipeService {
     }
     _recipes.clear();
     _recipes.addAll(loaded);
-    emitStream();
   }
 
   Recipe? _loadRecipe(String prefsID) {
@@ -72,7 +73,7 @@ class RecipeService {
 
   resetCookbook() async {
     await prefs?.clear();
-    _controller.sink.add([]);
+    _recipes.clear();
   }
 
 }

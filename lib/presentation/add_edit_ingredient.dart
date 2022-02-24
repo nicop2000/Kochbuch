@@ -1,34 +1,43 @@
-import 'dart:io';
-import 'dart:io' as Io;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kochbuch/data/ingredient.dart';
 import 'package:kochbuch/data/mengen_einheit.dart';
+import 'package:kochbuch/common.dart';
 
-class AddIngredient extends StatefulWidget {
-  const AddIngredient({Key? key, required this.onPressed}) : super(key: key);
+class AddEditIngredient extends StatefulWidget {
+  const AddEditIngredient({Key? key, required this.onPressed, this.ingredient}) : super(key: key);
 
   final Function(Ingredient) onPressed;
+  final Ingredient? ingredient;
 
   @override
-  State<AddIngredient> createState() => _AddIngredientState();
+  State<AddEditIngredient> createState() => _AddEditIngredientState();
 }
 
-class _AddIngredientState extends State<AddIngredient> {
+class _AddEditIngredientState extends State<AddEditIngredient> {
   final TextEditingController mengenTextController = TextEditingController();
   final TextEditingController zutatenTextController = TextEditingController();
   MengenEinheit _mengenEinheit = MengenEinheit.g;
+  String buttonText = "";
+  String titleText = "";
+
+  bool first = true;
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text("Zutat hinzufügen"),
-        backgroundColor: CupertinoColors.systemRed,
-        transitionBetweenRoutes: true,
+    if(first && widget.ingredient != null) prepareForEditing();
+    else if(widget.ingredient == null) {
+      buttonText = AppLocalizations.of(context)!.hinzufuegen_button_text;
+      titleText = AppLocalizations.of(context)!.neue_zutat_page_title;
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(titleText, style: Theme.of(context).textTheme.headline1,),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.secondary),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      child: SafeArea(
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           child: SingleChildScrollView(
@@ -41,7 +50,8 @@ class _AddIngredientState extends State<AddIngredient> {
                       flex: 2,
                       child: CupertinoTextField(
                           controller: mengenTextController,
-                          placeholder: "Menge",
+                          style: Theme.of(context).textTheme.bodyText1,
+                          placeholder: AppLocalizations.of(context)!.menge_placeholder,
                           keyboardType: TextInputType.phone),
                     ),
                     Flexible(
@@ -50,12 +60,15 @@ class _AddIngredientState extends State<AddIngredient> {
                         height: 60,
                         child: CupertinoPicker(
                             itemExtent: 25,
+                            selectionOverlay: CupertinoPickerDefaultSelectionOverlay(
+                              background: Theme.of(context).colorScheme.primaryVariant,
+                            ),
                             onSelectedItemChanged: (value) {
                               _mengenEinheit =
                                   MengenEinheit.values.elementAt(value);
                             },
                             children: MengenEinheit.values
-                                .map((e) => Text(e.name))
+                                .map((e) => Text(e.name, style: Theme.of(context).textTheme.bodyText2,),)
                                 .toList()),
                       ),
                     ),
@@ -63,14 +76,15 @@ class _AddIngredientState extends State<AddIngredient> {
                       flex: 5,
                       child: CupertinoTextField(
                         controller: zutatenTextController,
-                        placeholder: "Name",
+                        style: Theme.of(context).textTheme.bodyText1,
+                        placeholder: AppLocalizations.of(context)!.zutat_name_placeholder,
                         maxLines: 1,
                       ),
                     )
                   ],
                 ),
                 CupertinoButton(
-                  child: const Text("Hinzufügen"),
+                  child: Text(buttonText, style: Theme.of(context).textTheme.button,),
                   onPressed: () {
                     Ingredient i = Ingredient(
                         menge: int.tryParse(mengenTextController.text) ?? 0,
@@ -86,6 +100,15 @@ class _AddIngredientState extends State<AddIngredient> {
         ),
       ),
     );
+  }
+
+  void prepareForEditing() {
+    first = false;
+    mengenTextController.text = widget.ingredient!.menge.toString();
+    zutatenTextController.text = widget.ingredient!.zutat;
+    _mengenEinheit = widget.ingredient!.einheit;
+    buttonText = AppLocalizations.of(context)!.speichern_button_text;
+    titleText = AppLocalizations.of(context)!.zutat_edit_page_title;
   }
 }
 
