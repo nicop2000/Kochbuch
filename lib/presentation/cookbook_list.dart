@@ -37,7 +37,7 @@ class _CookbookListState extends State<CookbookList> {
               child: Container(
                 margin: const EdgeInsets.only(left: 10),
                 child: CupertinoTextField(
-                  placeholder: "Name eingeben", //TODO
+                  placeholder: AppLocalizations.of(context)!.rezept_suchen_placeholder,
                   style: Theme.of(context).textTheme.bodyText1,
                   onChanged: (string) => setState(() {
                     searchValue = string;
@@ -66,7 +66,7 @@ class _CookbookListState extends State<CookbookList> {
         centerTitle: true,
         leading: IconButton(
           color: Theme.of(context).colorScheme.secondary,
-          tooltip: "", //TODO,
+          tooltip: AppLocalizations.of(context)!.rezept_favoriten_zeigen_tooltip,
           onPressed: () {
             setState(() {
               filterFavorite = !filterFavorite;
@@ -90,7 +90,7 @@ class _CookbookListState extends State<CookbookList> {
             ),),
           IconButton(
             color: Theme.of(context).colorScheme.secondary,
-            tooltip: "", //TODO
+            tooltip: AppLocalizations.of(context)!.rezept_suchen_tooltip,
             onPressed: () => setState(() {
               searchMode = !searchMode;
               searchValue = "";
@@ -102,6 +102,13 @@ class _CookbookListState extends State<CookbookList> {
       ),
       body: Column(
         children: [
+          if(context.watch<RuntimeState>().getRecipes().isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0),
+              child: Center(child: Text("Es wurden noch keine Rezepte hinzugefügt", //TODO
+                style: Theme.of(context).textTheme.bodyText1,),),
+            )
+          else
           Expanded(
             child: GroupedListView<Recipe, Abteilung>(
               elements: context.watch<RuntimeState>().getRecipes().whereTitle(searchValue).filterFavorites(filterFavorite),

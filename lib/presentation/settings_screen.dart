@@ -36,11 +36,10 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           CupertinoButton(
-            child: Text("Kochbuch zurücksetzen", //TODO
+            child: Text(AppLocalizations.of(context)!.kochbuch_zuruecksetzen_button_text,
                 style: Theme.of(context).textTheme.button),
             onPressed: () async {
-              await context.read<RuntimeState>().resetCookBook();
-              successDialog(context);
+              resetCookbook(context);
             },
           )
         ],
@@ -70,9 +69,9 @@ class SettingsScreen extends StatelessWidget {
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
             title: Text(
-                "Erfolg", style: Theme.of(context).textTheme.headline2), //TODO
-            content: Text(
-                "Das Kochbuch wurde erfolgreich zurückgesetzt. Alle Rezepte und Einstellungen wurden entfernt", style: Theme.of(context).textTheme.bodyText1), //TODO
+                AppLocalizations.of(context)!.rezept_success_dialog_title, style: Theme.of(context).textTheme.headline2),
+            content: Text(AppLocalizations.of(context)!.kochbuch_zuruecksetzen_success_dialog_text
+                , style: Theme.of(context).textTheme.bodyText1),
             actions: [
               CupertinoDialogAction(
                 child: Text(AppLocalizations.of(context)!.ok_button_text, style: Theme.of(context).textTheme.button),
@@ -81,5 +80,35 @@ class SettingsScreen extends StatelessWidget {
             ],
           );
         });
+  }
+
+  confirmationDialog(BuildContext context) async {
+    return await showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text(
+                AppLocalizations.of(context)!.kochbuch_zuruecksetzen_confirmation_dialog_title, style: Theme.of(context).textTheme.headline2), //TODO
+            content: Text(AppLocalizations.of(context)!.kochbuch_zuruecksetzen_confirmation_dialog_text
+                , style: Theme.of(context).textTheme.bodyText1),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(AppLocalizations.of(context)!.rezept_loeschen_dialog_ja, style: Theme.of(context).textTheme.button),
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+              CupertinoDialogAction(
+                child: Text(AppLocalizations.of(context)!.rezept_loeschen_dialog_nein, style: Theme.of(context).textTheme.button),
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+            ],
+          );
+        });
+  }
+
+  void resetCookbook(BuildContext context) async {
+    if(await confirmationDialog(context)) {
+    await context.read<RuntimeState>().resetCookBook();
+    successDialog(context);
+    }
   }
 }

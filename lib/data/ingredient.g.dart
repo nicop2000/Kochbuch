@@ -7,10 +7,12 @@ part of 'ingredient.dart';
 // **************************************************************************
 
 Ingredient _$IngredientFromJson(Map<String, dynamic> json) => Ingredient(
-      menge: json['menge'] as int,
+      menge: json['menge'] == null ? null : json['menge'] as int,
       zutat: json['zutat'] as String,
       einheit: $enumDecode(_$MengenEinheitEnumMap, json['einheit']),
     );
+
+
 
 Map<String, dynamic> _$IngredientToJson(Ingredient instance) =>
     <String, dynamic>{
@@ -28,4 +30,5 @@ const _$MengenEinheitEnumMap = {
   MengenEinheit.EL: 'EL',
   MengenEinheit.Msp: 'Msp',
   MengenEinheit.Prise: 'Prise',
+  MengenEinheit.NULL : 'NULL'
 };

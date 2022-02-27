@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:kochbuch/data/abteilung.dart';
 import 'package:kochbuch/data/backanweisung.dart';
 import 'package:kochbuch/common.dart';
+import 'package:kochbuch/data/mengen_einheit.dart';
 import 'package:kochbuch/data/recipe.dart';
 
 extension TemperatureinheitNamen on Temperatureinheit {
@@ -11,6 +12,12 @@ extension TemperatureinheitNamen on Temperatureinheit {
               .toLowerCase() : "°$name";
 
 }
+
+extension MengeneinheitNamen on MengenEinheit {
+  String get showName => this == MengenEinheit.NULL ? "" : name + " ";
+}
+
+
 
 extension AbteilungsNamen on Abteilung {
   String get showName =>
@@ -65,7 +72,8 @@ extension AbteilungMap on Abteilung {
     Abteilung.cocktail : AppLocalizations
         .of(context)!.cocktail,
     Abteilung.sonstiges : AppLocalizations
-        .of(context)!.sonstiges
+        .of(context)!.sonstiges,
+    Abteilung.marinade : AppLocalizations.of(context)!.marinade
   };
     return _map[this]!;
   }

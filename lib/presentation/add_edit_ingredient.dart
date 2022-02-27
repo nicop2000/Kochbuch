@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kochbuch/base/Ext.dart';
 import 'package:kochbuch/data/ingredient.dart';
 import 'package:kochbuch/data/mengen_einheit.dart';
 import 'package:kochbuch/common.dart';
@@ -68,7 +69,7 @@ class _AddEditIngredientState extends State<AddEditIngredient> {
                                   MengenEinheit.values.elementAt(value);
                             },
                             children: MengenEinheit.values
-                                .map((e) => Text(e.name, style: Theme.of(context).textTheme.bodyText2,),)
+                                .map((e) => Text(e.showName, style: Theme.of(context).textTheme.bodyText2,),)
                                 .toList()),
                       ),
                     ),

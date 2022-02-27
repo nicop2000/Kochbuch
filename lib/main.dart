@@ -10,6 +10,7 @@ import 'package:kochbuch/presentation/style.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'common.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,43 +21,13 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => RuntimeState())],
-      child: MyApp(),
+      child:const  MyApp(),
     ),
   );
 }
 
-class MyApp extends StatefulWidget {
-  MyApp({Key? key}) : super(key: key);
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  final List<Widget> _tabs = [
-    const CookbookList(),
-    ImportScreen(),
-    SettingsScreen()
-  ];
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance?.addObserver(this);
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance?.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didChangePlatformBrightness() {
-  //   // final Brightness brightness =
-  //   //     WidgetsBinding.instance?.window.platformBrightness;
-  //   //inform listeners and rebuild widget tree
-  // }
+class MyApp extends StatelessWidget {
+ const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -84,24 +55,38 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         Locale('de'),
         Locale('en'),
       ],
-      home: CupertinoTabScaffold(
-          tabBar: CupertinoTabBar(
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.book), label: 'Rezepte'), //TODO
-              BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.square_arrow_down),
-                  label: 'Import'),
-              BottomNavigationBarItem(
-                  icon: Icon(CupertinoIcons.settings), label: 'Einstellungen'),
-            ],
-          ),
-          tabBuilder: (BuildContext context, index) {
-            return _tabs[index];
-          }),
+      home: AppScaffold()
     );
   }
 }
+
+class AppScaffold extends StatelessWidget {
+  AppScaffold({Key? key}) : super(key: key);
+  final List<Widget> _tabs = [
+    const CookbookList(),
+    const ImportScreen(),
+    const SettingsScreen()
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoTabScaffold(
+        tabBar: CupertinoTabBar(
+          items: [
+            BottomNavigationBarItem(
+                icon: const Icon(CupertinoIcons.book), label: AppLocalizations.of(context)!.bottom_bar_item_title_rezepte), //TODO
+            BottomNavigationBarItem(
+                icon: const Icon(CupertinoIcons.square_arrow_down),
+                label: AppLocalizations.of(context)!.bottom_bar_item_title_import),
+            BottomNavigationBarItem(
+                icon: const Icon(CupertinoIcons.settings), label: AppLocalizations.of(context)!.bottom_bar_item_title_einstellungen),
+          ],
+        ),
+        tabBuilder: (BuildContext context, index) {
+          return _tabs[index];
+        });
+  }
+}
+
 
 
 /*

@@ -7,6 +7,8 @@ import 'package:kochbuch/data/recipe_image.dart';
 
 part 'recipe.g.dart';
 
+//TODO bild hinzufügen bei instruction textstyle
+
 @JsonSerializable()
 class Recipe {
   int id = 0;

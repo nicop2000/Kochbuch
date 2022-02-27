@@ -12,7 +12,12 @@ enum Abteilung {
   brot,
   salate,
   cocktail,
-  sonstiges
+  sonstiges,
+  marinade,
+  //grillen,
+  //auflauf,
+  //eintopf,
+
 }
 
 

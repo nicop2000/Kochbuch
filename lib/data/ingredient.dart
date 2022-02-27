@@ -6,7 +6,7 @@ part 'ingredient.g.dart';
 @JsonSerializable()
 class Ingredient {
 
-  int menge;
+  int? menge;
   String zutat;
   MengenEinheit einheit;
 

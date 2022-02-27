@@ -383,8 +383,8 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
           ? ingredients
               .map((e) => Row(
                     children: [
-                      Text("${e.menge.toString()} ",style: Theme.of(context).textTheme.bodyText1,),
-                      Text("${e.einheit.name.toString()} ",style: Theme.of(context).textTheme.bodyText1,),
+                      Text("${e.menge ?? ""} ",style: Theme.of(context).textTheme.bodyText1,),
+                      Text(e.einheit.showName,style: Theme.of(context).textTheme.bodyText1,),
                       Text(e.zutat,style: Theme.of(context).textTheme.bodyText1,),
                       const Spacer(),
                       IconButton(
