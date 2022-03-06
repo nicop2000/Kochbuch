@@ -104,8 +104,8 @@ ColorScheme c2Dark = ColorScheme(
     brightness: Brightness.dark);
 
 TextTheme cText(ColorScheme colorScheme) => TextTheme(
-    bodyText1: TextStyle(fontSize: 14, color: colorScheme.onPrimary),
-    bodyText2: TextStyle(fontSize: 20, color: colorScheme.onPrimary), //Picker
+    bodyText1: TextStyle(fontSize: 14, color: colorScheme.onPrimary, fontWeight: FontWeight.normal),
+    bodyText2: TextStyle(fontSize: 20, color: colorScheme.onPrimary, fontWeight: FontWeight.normal), //Picker
     button: TextStyle(
       color: colorScheme.secondary,
       fontSize: 14,

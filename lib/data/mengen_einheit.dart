@@ -9,4 +9,5 @@ enum MengenEinheit {
   EL,
   Msp,
   Prise,
+  NULL,
 }

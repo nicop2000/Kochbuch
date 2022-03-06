@@ -10,6 +10,8 @@ import 'package:kochbuch/base/Ext.dart';
 import 'package:kochbuch/data/instruction.dart';
 import 'package:kochbuch/data/recipe.dart';
 import 'package:kochbuch/data/recipe_service.dart';
+import 'package:kochbuch/domain/create_pdf.dart';
+import 'package:kochbuch/domain/file_handler.dart';
 import 'package:kochbuch/domain/runtime_state.dart';
 import 'package:kochbuch/presentation/add_edit_recipe.dart';
 import 'package:kochbuch/presentation/components/custom_divider.dart';
@@ -32,9 +34,13 @@ class DetailView extends StatelessWidget {
     log(recipe.ingredients.toString());
     return Scaffold(
       appBar: AppBar(
-        title: Text(recipe.title, style: Theme.of(context).textTheme.headline1,),
+        title: Text(
+          recipe.title,
+          style: Theme.of(context).textTheme.headline1,
+        ),
         centerTitle: true,
-        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.secondary),
+        iconTheme:
+            IconThemeData(color: Theme.of(context).colorScheme.secondary),
         backgroundColor: Theme.of(context).colorScheme.primary,
         actions: [
           IconButton(
@@ -71,7 +77,8 @@ class DetailView extends StatelessWidget {
               SliverFillRemaining(
                 hasScrollBody: false,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start, //TODO mit richtigem Rezept ausprobieren
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  //TODO mit richtigem Rezept ausprobieren
                   crossAxisAlignment: mainAlignment,
                   children: [
                     if (recipe.image != null)
@@ -89,33 +96,60 @@ class DetailView extends StatelessWidget {
                       Column(
                         crossAxisAlignment: mainAlignment,
                         children: [
-                          Text(AppLocalizations.of(context)!
-                              .rezept_beschreibung_headline, style: Theme.of(context).textTheme.headline4),
-                          Text(recipe.description!, style: Theme.of(context).textTheme.bodyText1,),
-
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: Text(
+                                AppLocalizations.of(context)!
+                                    .rezept_beschreibung_headline,
+                                style: Theme.of(context).textTheme.headline4),
+                          ),
+                          Text(
+                            recipe.description!,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
                           CustomDivider()
                         ],
                       ),
-                    Text(
-                      AppLocalizations.of(context)!.zutaten_page_title, style: Theme.of(context).textTheme.headline4,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                        AppLocalizations.of(context)!.zutaten_page_title,
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
                     ),
                     Column(
                       crossAxisAlignment: mainAlignment,
                       children: recipe.ingredients
                               ?.map((e) => Text(
-                                  "${e.menge} ${e.einheit.name} ${e.zutat}", style: Theme.of(context).textTheme.bodyText1,))
+                                    "${e.menge ?? ""} ${e.einheit.showName} ${e.zutat}",
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ))
                               .toList() ??
                           [
-                            Text(AppLocalizations.of(context)!
-                                .keine_zutaten_info_text, style: Theme.of(context).textTheme.bodyText1,)
+                            Text(
+                              AppLocalizations.of(context)!
+                                  .keine_zutaten_info_text,
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
                           ],
                     ),
                     CustomDivider(),
-                    Text(AppLocalizations.of(context)!
-                        .zubereitungsschritte_page_title, style: Theme.of(context).textTheme.headline4),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                          AppLocalizations.of(context)!
+                              .zubereitungsschritte_page_title,
+                          style: Theme.of(context).textTheme.headline4),
+                    ),
                     if (recipe.abteilung.isBackable())
-                      Text(
-                          "${recipe.backanweisung!.backzeit} ${AppLocalizations.of(context)!.rezept_backzeit_minuten_bei_text} ${recipe.backanweisung!.temperatureinheit.showName} ${AppLocalizations.of(context)!.rezept_backzeit_verb}", style: Theme.of(context).textTheme.bodyText1,),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Text(
+                          "${recipe.backanweisung?.backzeit} ${AppLocalizations.of(context)!.rezept_backzeit_minuten_bei_text} ${recipe.backanweisung?.temperatur} ${recipe.backanweisung?.temperatureinheit.showName} ${AppLocalizations.of(context)!.rezept_backzeit_verb}",
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      ),
                     if (recipe.instructions != null)
                       Container(
                         constraints: const BoxConstraints.expand(height: 300),
@@ -132,11 +166,13 @@ class DetailView extends StatelessWidget {
                                   SingleChildScrollView(
                                     child: Text(
                                       instruction.instruction,
-                                      style: Theme.of(context).textTheme.bodyText1,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
                                     ),
                                   ),
                                   if (instruction.instructionImage != null)
-                                    instruction.instructionImage!.asImage(height: 150)
+                                    instruction.instructionImage!
+                                        .asImage(height: 150)
                                 ],
                               ),
                             );
@@ -144,8 +180,11 @@ class DetailView extends StatelessWidget {
                         ),
                       )
                     else
-                      Text(AppLocalizations.of(context)!
-                          .keine_zubereitungsschritte_info_text, style: Theme.of(context).textTheme.bodyText1,),
+                      Text(
+                        AppLocalizations.of(context)!
+                            .keine_zubereitungsschritte_info_text,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
                     if (recipe.instructions != null)
                       Column(
                         children: [
@@ -158,7 +197,8 @@ class DetailView extends StatelessWidget {
                             count: recipe.instructions!.length,
                             effect: JumpingDotEffect(
                               dotColor: Theme.of(context).colorScheme.secondary,
-                              activeDotColor: Theme.of(context).colorScheme.primary,
+                              activeDotColor:
+                                  Theme.of(context).colorScheme.primary,
                               verticalOffset: 20,
                               dotHeight: 8,
                               dotWidth: 8,
@@ -173,8 +213,10 @@ class DetailView extends StatelessWidget {
                       children: [
                         if (recipe.link != null)
                           CupertinoButton(
-                              child: Text(AppLocalizations.of(context)!
-                                  .rezept_im_browser_oeffnen_button_text, style: Theme.of(context).textTheme.button),
+                              child: Text(
+                                  AppLocalizations.of(context)!
+                                      .rezept_im_browser_oeffnen_button_text,
+                                  style: Theme.of(context).textTheme.button),
                               onPressed: () async {
                                 String url = recipe.link!;
                                 if (await canLaunch(url)) {
@@ -185,16 +227,29 @@ class DetailView extends StatelessWidget {
                                       builder: (BuildContext context) {
                                         return CupertinoAlertDialog(
                                           title: Text(
-                                              AppLocalizations.of(context)!
-                                                  .fehler_text, style: Theme.of(context).textTheme.headline2,),
-                                          content: Text(AppLocalizations.of(
-                                                  context,)!
-                                              .rezept_im_browser_error_dialog_text, style: Theme.of(context).textTheme.bodyText1,),
+                                            AppLocalizations.of(context)!
+                                                .fehler_text,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline2,
+                                          ),
+                                          content: Text(
+                                            AppLocalizations.of(
+                                              context,
+                                            )!
+                                                .rezept_im_browser_error_dialog_text,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
                                           actions: [
                                             CupertinoDialogAction(
                                               child: Text(
                                                   AppLocalizations.of(context)!
-                                                      .ok_button_text, style: Theme.of(context).textTheme.button),
+                                                      .ok_button_text,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .button),
                                               onPressed: () =>
                                                   Navigator.of(context).pop(),
                                             )
@@ -204,10 +259,20 @@ class DetailView extends StatelessWidget {
                                 }
                               }),
                         CupertinoButton(
-                            child: Text(AppLocalizations.of(context)!
-                                .exportieren_button_text, style: Theme.of(context).textTheme.button),
+                            child: Text(
+                                AppLocalizations.of(context)!
+                                    .exportieren_button_text,
+                                style: Theme.of(context).textTheme.button),
                             onPressed: () async {
-                              await shareFile();
+                              log(recipe.image!.base64String.length.toString());
+                              await FileHandler().shareRecipeAsJSON(recipe);
+                            }),
+                        CupertinoButton(
+                            child: Text(
+                                "PDF", //TODO
+                                style: Theme.of(context).textTheme.button),
+                            onPressed: () async {
+                              CreatePDF().createOnMobile(recipe, context);
                             })
                       ],
                     )
@@ -226,19 +291,23 @@ class DetailView extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
-          title:
-              Text(AppLocalizations.of(context)!.rezept_loeschen_dialog_title, style: Theme.of(context).textTheme.headline2),
+          title: Text(
+              AppLocalizations.of(context)!.rezept_loeschen_dialog_title,
+              style: Theme.of(context).textTheme.headline2),
           content: Text(
-              AppLocalizations.of(context)!.rezept_loeschen_dialog_text(title), style: Theme.of(context).textTheme.bodyText1),
+              AppLocalizations.of(context)!.rezept_loeschen_dialog_text(title),
+              style: Theme.of(context).textTheme.bodyText1),
           actions: <Widget>[
             CupertinoDialogAction(
                 onPressed: () => Navigator.of(context).pop(true),
                 child: Text(
-                    AppLocalizations.of(context)!.rezept_loeschen_dialog_ja, style: Theme.of(context).textTheme.button)),
+                    AppLocalizations.of(context)!.rezept_loeschen_dialog_ja,
+                    style: Theme.of(context).textTheme.button)),
             CupertinoDialogAction(
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(
-                  AppLocalizations.of(context)!.rezept_loeschen_dialog_nein, style: Theme.of(context).textTheme.button),
+                  AppLocalizations.of(context)!.rezept_loeschen_dialog_nein,
+                  style: Theme.of(context).textTheme.button),
             ),
           ],
         );
@@ -246,15 +315,5 @@ class DetailView extends StatelessWidget {
     );
   }
 
-  Future<void> shareFile() async {
-    Directory temporaryDirectory = await getTemporaryDirectory();
 
-    String path =
-        '${temporaryDirectory.path}/recipe-${recipe.title}-ID_${recipe.id}.json';
-    File file = await File(path).create();
-    file.writeAsStringSync(jsonEncode(recipe.toJson()));
-
-    await FlutterShare.shareFile(
-        fileType: 'application/json', title: recipe.title, filePath: file.path);
-  }
 }

@@ -383,8 +383,8 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
           ? ingredients
               .map((e) => Row(
                     children: [
-                      Text("${e.menge.toString()} ",style: Theme.of(context).textTheme.bodyText1,),
-                      Text("${e.einheit.name.toString()} ",style: Theme.of(context).textTheme.bodyText1,),
+                      Text("${e.menge ?? ""} ",style: Theme.of(context).textTheme.bodyText1,),
+                      Text(e.einheit.showName,style: Theme.of(context).textTheme.bodyText1,),
                       Text(e.zutat,style: Theme.of(context).textTheme.bodyText1,),
                       const Spacer(),
                       IconButton(
@@ -447,7 +447,8 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-                AppLocalizations.of(context)!.rezept_backzeit_minuten_bei_text, style: Theme.of(context).textTheme.bodyText1,),
+                AppLocalizations.of(context)!.rezept_backzeit_minuten_bei_text,
+              style: Theme.of(context).textTheme.bodyText1,),
           ),
           Flexible(
             child: CupertinoTextField(
@@ -468,7 +469,7 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
                 _temperatureinheit = Temperatureinheit.values.elementAt(value);
               },
               children: Temperatureinheit.values
-                  .map((e) => Text(e.showName, style: Theme.of(context).textTheme.bodyText2,))
+                  .map((e) => Text(e.showName, style: Theme.of(context).textTheme.bodyText1,))
                   .toList(),
             ),
           ),

@@ -13,6 +13,7 @@
   "salate" :  "Salad",
   "cocktail" :  "Cocktail",
   "sonstiges" :  "Miscellaneous",
+  "marinade": "Marinade",
 
 
   "zutaten_page_title": "Ingredients",
@@ -69,6 +70,19 @@
   "rezept_import_error_dialog_text": "Something went wrong. Please verify you chose the right import method and picked a valid file",
   "rezept_export_collection_button_text": "Export my cookbook",
   "rezept_import_page_title": "Import files",
-  "rezept_einstellungen_page_title": "Settings"
+  "rezept_einstellungen_page_title": "Settings",
+  "bottom_bar_item_title_rezepte": "Recipes",
+  "bottom_bar_item_title_import": "Import",
+  "bottom_bar_item_title_einstellungen": "Settings",
+  "rezept_success_dialog_title": "Success",
+  "rezept_import_success_dialog_text": "The chosen file was successfully imported",
+  "kochbuch_zuruecksetzen_button_text": "Reset my cookbook",
+  "kochbuch_zuruecksetzen_success_dialog_text": "Your cookbook was successfully reseted. All recipes and customized settings were removed",
+  "rezept_suchen_placeholder": "Enter title",
+  "rezept_suchen_tooltip": "Search",
+  "rezept_favoriten_zeigen_tooltip": "Show favorites",
+  "kochbuch_zuruecksetzen_confirmation_dialog_title": "Delete cookbook",
+  "kochbuch_zuruecksetzen_confirmation_dialog_text": "Do you really want to delete your whole cookbook? All recipes and customized settings will be removed"
+
 
 }

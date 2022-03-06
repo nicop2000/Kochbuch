@@ -54,4 +54,5 @@ const _$AbteilungEnumMap = {
   Abteilung.brot: 'brot',
   Abteilung.cocktail: 'cocktail',
   Abteilung.sonstiges: 'sonstiges',
+  Abteilung.marinade: 'marinade'
 };

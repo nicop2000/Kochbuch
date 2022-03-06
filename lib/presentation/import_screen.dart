@@ -103,7 +103,7 @@ class ImportScreen extends StatelessWidget {
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
             title: Text(
-                AppLocalizations.of(context)!.rezept_import_success_dialog_title, style: Theme.of(context).textTheme.headline2),
+                AppLocalizations.of(context)!.rezept_success_dialog_title, style: Theme.of(context).textTheme.headline2),
             content: Text(
                 AppLocalizations.of(context)!.rezept_import_success_dialog_text, style: Theme.of(context).textTheme.bodyText1),
             actions: [

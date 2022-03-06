@@ -3,6 +3,9 @@
   "@helloWorld": {
     "description": "The conventional newborn programmer greeting"
   },
+  "bottom_bar_item_title_rezepte": "Rezepte",
+  "bottom_bar_item_title_import": "Importieren",
+  "bottom_bar_item_title_einstellungen": "Einstellungen",
   "alle_rezepte": "Alle Rezepte",
   "fruehstueck": "Frühstück",
   "mittagessen": "Mittagessen",
@@ -16,6 +19,7 @@
   "salate": "Salat",
   "cocktail": "Cocktail",
   "sonstiges": "Sonstiges",
+  "marinade": "Marinade",
   "ok_button_text": "OK",
   "abbrechen_button_text": "Abbrechen",
   "fehler_text": "Fehler",
@@ -78,15 +82,21 @@
   "rezept_im_browser_oeffnen_button_text": "Im Browser öffnen",
   "rezept_im_browser_error_dialog_text": "Das Rezept konnte nicht im Browser geöffnet werden. Entweder gab es einen internen Fehler oder der Link ist fehlerhaft",
   "rezept_bild_loeschen": "Bild löschen",
-  "rezept_beschreibung_headline" : "Beschreibung",
+  "rezept_beschreibung_headline": "Beschreibung",
   "rezept_import_einzeln_button_text": "Einzelnes Rezept importieren",
   "rezept_import_collection_button_text": "Ganzes Kochbuch importieren",
   "rezept_import_error_dialog_title": "Fehler",
   "rezept_import_error_dialog_text": "Die ausgewählte Datei ist nicht gültig. Stellen Sie sicher, die richtige Option ausgewählt zu haben",
-  "rezept_import_success_dialog_title": "Erfolg",
+  "rezept_success_dialog_title": "Erfolg",
   "rezept_import_success_dialog_text": "Die ausgewählte Datei wurde importiert",
   "rezept_export_collection_button_text": "Mein Kochbuch exportieren",
   "rezept_import_page_title": "Dateien importieren",
   "rezept_einstellungen_page_title": "Einstellungen",
-  "rezept_suche_page_title": "Alle Rezepte durchsuchen"
+  "kochbuch_zuruecksetzen_button_text": "Kochbuch zurücksetzen",
+  "kochbuch_zuruecksetzen_success_dialog_text": "Das Kochbuch wurde erfolgreich zurückgesetzt. Alle Rezepte und Einstellungen wurden entfernt",
+  "rezept_suchen_placeholder": "Titel eingeben",
+  "rezept_suchen_tooltip": "Durchsuchen",
+  "rezept_favoriten_zeigen_tooltip": "Nur Favoriten zeigen",
+  "kochbuch_zuruecksetzen_confirmation_dialog_title": "Löschen?",
+  "kochbuch_zuruecksetzen_confirmation_dialog_text": "Das ganze Kochbuch löschen? Alle Rezepte und Einstellungen gehen dabei verloren"
 }

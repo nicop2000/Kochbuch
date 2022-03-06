@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
+import 'package:kochbuch/domain/file_handler.dart';
 import 'package:kochbuch/domain/runtime_state.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -32,15 +33,14 @@ class SettingsScreen extends StatelessWidget {
                     .rezept_export_collection_button_text,
                 style: Theme.of(context).textTheme.button),
             onPressed: () {
-              shareCookbook(context);
+              FileHandler().shareCookbookAsJSON(cookbook: context.read<RuntimeState>().exportRecipeCollectionToJson(), cookbookLength: context.read<RuntimeState>().getRecipes().length);
             },
           ),
           CupertinoButton(
-            child: Text("Kochbuch zurücksetzen", //TODO
+            child: Text(AppLocalizations.of(context)!.kochbuch_zuruecksetzen_button_text,
                 style: Theme.of(context).textTheme.button),
             onPressed: () async {
-              await context.read<RuntimeState>().resetCookBook();
-              successDialog(context);
+              resetCookbook(context);
             },
           )
         ],
@@ -48,21 +48,7 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Future<void> shareCookbook(BuildContext context) async {
-    Directory temporaryDirectory = await getTemporaryDirectory();
 
-    String path = '${temporaryDirectory.path}/recipe-collection-'
-        'size-${context.read<RuntimeState>().getRecipes().length}-'
-        'date-${DateTime.now().toLocal()}.json';
-    File file = await File(path).create();
-    file.writeAsStringSync(
-        context.read<RuntimeState>().exportRecipeCollectionToJson());
-
-    await FlutterShare.shareFile(
-        fileType: 'application/json',
-        title: path.split('/').last,
-        filePath: file.path);
-  }
 
   successDialog(BuildContext context) {
     showCupertinoDialog(
@@ -70,9 +56,9 @@ class SettingsScreen extends StatelessWidget {
         builder: (BuildContext context) {
           return CupertinoAlertDialog(
             title: Text(
-                "Erfolg", style: Theme.of(context).textTheme.headline2), //TODO
-            content: Text(
-                "Das Kochbuch wurde erfolgreich zurückgesetzt. Alle Rezepte und Einstellungen wurden entfernt", style: Theme.of(context).textTheme.bodyText1), //TODO
+                AppLocalizations.of(context)!.rezept_success_dialog_title, style: Theme.of(context).textTheme.headline2),
+            content: Text(AppLocalizations.of(context)!.kochbuch_zuruecksetzen_success_dialog_text
+                , style: Theme.of(context).textTheme.bodyText1),
             actions: [
               CupertinoDialogAction(
                 child: Text(AppLocalizations.of(context)!.ok_button_text, style: Theme.of(context).textTheme.button),
@@ -81,5 +67,35 @@ class SettingsScreen extends StatelessWidget {
             ],
           );
         });
+  }
+
+  confirmationDialog(BuildContext context) async {
+    return await showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text(
+                AppLocalizations.of(context)!.kochbuch_zuruecksetzen_confirmation_dialog_title, style: Theme.of(context).textTheme.headline2), //TODO
+            content: Text(AppLocalizations.of(context)!.kochbuch_zuruecksetzen_confirmation_dialog_text
+                , style: Theme.of(context).textTheme.bodyText1),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(AppLocalizations.of(context)!.rezept_loeschen_dialog_ja, style: Theme.of(context).textTheme.button),
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+              CupertinoDialogAction(
+                child: Text(AppLocalizations.of(context)!.rezept_loeschen_dialog_nein, style: Theme.of(context).textTheme.button),
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+            ],
+          );
+        });
+  }
+
+  void resetCookbook(BuildContext context) async {
+    if(await confirmationDialog(context)) {
+    await context.read<RuntimeState>().resetCookBook();
+    successDialog(context);
+    }
   }
 }

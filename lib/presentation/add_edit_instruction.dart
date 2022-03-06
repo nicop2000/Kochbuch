@@ -59,9 +59,7 @@ class _AddEditInstructionState extends State<AddEditInstruction> {
                 ),
                 CupertinoButton(
                     child: Text(AppLocalizations.of(context)!.bild_hinzufuegen_button_text,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),),
+                      style: Theme.of(context).textTheme.button),
                     onPressed: () {
                       showCupertinoDialog(
                           context: context,
